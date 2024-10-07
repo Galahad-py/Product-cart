@@ -43,7 +43,7 @@ body {
 .add-to-cart {
     background-color: #ffffff;
     color: rgb(0, 0, 0);
-    border: solid 1px;
+    border: solid 0.5px hsl(14, 5%, 72%);
     padding: 8px 16px;
     border-radius: 20px;
     cursor: pointer;
@@ -61,7 +61,8 @@ body {
 }
 
 .add-to-cart:hover {
-    background-color: #ffe2da;
+    color: hsl(14, 86%, 42%);
+    border-color: hsl(14, 86%, 42%);
 }
 
 .add-to-cart::before {
@@ -116,6 +117,7 @@ img {
     padding: 20px;
     width: 300px;
     height: 250px;
+    margin-top: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -138,6 +140,23 @@ img {
 
 .cart-message {
     text-align: center;
-    color: #888;
+    color: hsl(7, 20%, 60%);
     font-size: 14px;
+}
+
+/*active button style*/
+
+.decrease-btn, .increase-btn {
+    background-color: #ffffff;
+    border: solid 0.5px hsl(14, 5%, 72%);
+    padding: 0 7px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.decrease-btn:hover, .increase-btn:hover {
+    background-color: hsl(14, 86%, 42%);
+    color: white;
 }
