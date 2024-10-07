@@ -14,7 +14,11 @@ body {
 .container {
     display: flex;
     justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
 }
+
 .product-container {
     max-width: 1200px;
     margin: 0 auto;
