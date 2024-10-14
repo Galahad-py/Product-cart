@@ -1,3 +1,4 @@
+
 let itemCounts = {};
 let activeButtonIndex = null;
 
@@ -64,19 +65,16 @@ function resetCartButton(button, index) {
 }
 
 function addToCart(index) {
-    const itemInCart = cart.find(item => item.id === index);
-
-    if (itemInCart) {
-        itemInCart.quantity = itemCounts[index];
-    } else {
-        const newItem = {
-            id: index,
-            name: `Item ${index + 1}`,
-            price: 10.00,
-            quantity: itemCounts[index]
-        };
-        cart.push(newItem);
-    } 
+    const productName = document.querySelector(`.product-subtext[data-index="${index}"]`).textContent;
+    const productPrice = parseFloat(document.querySelector(`.product-price[data-index="${index}"]`).dataset.price);
+    
+    const item = {
+        id: index,
+        name: productName,
+        price: productPrice,
+        quantity: 1
+    };
+    cart.push(item);
     updateCart(index);
 }
 
@@ -89,20 +87,26 @@ function updateCart(index) {
     toggleEmptyCartState();
 
     if (cartItem) {
-        cartItem.querySelector('.cart-item-quantity').textContent = item.quantity;
+        cartItem.querySelector('.cart-item-quantity').textContent = `${item.quantity}x`;
         cartItem.querySelector('.cart-item-total').textContent = `$${(item.price * item.quantity).toFixed(2)}`;
     } else {
         cartItem = document.createElement('li');
         cartItem.classList.add('cart-item');
         cartItem.id = `item-${index}`;
         cartItem.innerHTML = `
-            <span class="cart-item-name">${item.name}</span>
-            <span class="cart-item-quantity">${item.quantity}</span>
-            <span class="cart-item-total">${(item.price * item.quantity).toFixed(2)}</span>
-            <button class="remove-item">
-                <img src="/assets/images/icon-remove-item.svg" alt="Remove Item" class="remove-icon">
-            </button>
-            `;
+            <div class="item-container">
+                <div class="item-inner-container">
+                    <p class="cart-item-name">${item.name}</p>
+                    <div class="item-subtext">
+                        <span class="cart-item-quantity">${item.quantity}x</span>
+                        <span class="cart-item-price">@$${item.price.toFixed(2)}</span>
+                        <span class="cart-item-total">$${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                </div>
+                <button class="remove-item">
+                    <img src="/assets/images/remove-item-icon.svg" alt="remove-icon" class="remove-icon">
+                </button>
+            </div>`;
         cartItemsList.appendChild(cartItem);
 
         cartItem.querySelector('.remove-item').addEventListener('click', function () {
@@ -111,7 +115,7 @@ function updateCart(index) {
     }
     updateTotalCost();
     updateCartHeading();
-}   
+}     
 function toggleEmptyCartState() {
     const emptyCartIcon = document.querySelector('.empty-cart-icon');
 
@@ -134,7 +138,7 @@ function removeFromCart(index) {
 
 function updateTotalCost(){
     totalCost = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    totalCostElement.textContent = `${totalCost.toFixed(2)}`;
+    totalCostElement.textContent = `$${totalCost.toFixed(2)}`;
 }
 
 function updateCartHeading() {
