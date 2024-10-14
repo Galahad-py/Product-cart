@@ -1,12 +1,8 @@
-
 let itemCounts = {};
-let activeButtonIndex = null;
-
 let cart = [];
 let totalCost = 0;
 
 const cartButtons = document.querySelectorAll('.add-to-cart');
-
 const cartItemsList = document.querySelector('.cart-items-list');
 const totalCostElement = document.querySelector('.total-cost');
 const cartHeading = document.querySelector('.cart-heading');
@@ -15,13 +11,8 @@ cartButtons.forEach((button, index) => {
     itemCounts[index] = 0;
 
     button.addEventListener('click', function() {
-        if (activeButtonIndex !== null && activeButtonIndex !== index) {
-            resetCartButton(cartButtons[activeButtonIndex], activeButtonIndex);
-        }
-    
-        if (itemCounts[index] === 0) {
+        if (itemCounts[index]=== 0) {
             itemCounts[index] = 1;
-            activeButtonIndex = index;
             updateCartButton(button, index);
             addToCart(index);
         }
@@ -38,25 +29,30 @@ function updateCartButton(button, index) {
     const increaseBtn = button.querySelector('.increase-btn');
     const decreaseBtn = button.querySelector('.decrease-btn');
 
-    increaseBtn.addEventListener('click', function() {
+    increaseBtn.removeEventListener('click', handleIncrease);
+    decreaseBtn.removeEventListener('click', handleDecrease);
+
+    increaseBtn.addEventListener('click', handleIncrease);
+    decreaseBtn.addEventListener('click', handleDecrease);
+
+    function handleIncrease() {
         itemCounts[index]++;
         button.querySelector('.item-count').textContent = itemCounts[index];
         updateCart(index);
-    });
+    }
 
-    decreaseBtn.addEventListener('click', function() {
+    function handleDecrease() {
         itemCounts[index]--;
         if (itemCounts[index] > 0) {
             button.querySelector('.item-count').textContent = itemCounts[index];
             updateCart(index);
         } else {
-            // button.querySelector('.item-count').textContent = 0;
             setTimeout(() => {
                 resetCartButton(button, index);
                 removeFromCart(index);
-            }, 500); // Delay of 0.5 second
+            }, 500);
         }
-    });
+    }
 }
 
 function resetCartButton(button, index) {
@@ -116,16 +112,24 @@ function updateCart(index) {
     updateTotalCost();
     updateCartHeading();
 }     
+
 function toggleEmptyCartState() {
     const emptyCartIcon = document.querySelector('.empty-cart-icon');
+    const cartSummary = document.querySelector('.cart-summary');
 
     if (cart.length === 0) {
         emptyCartIcon.style.display = 'block';
         cartItemsList.style.display = 'none';
+        cartSummary.style.display = 'none';
+        totalCostElement.style.display = 'none';
     } else {
         emptyCartIcon.style.display = 'none';
         cartItemsList.style.display = 'block';
+        cartSummary.style.display = 'flex';
+        totalCostElement.style.display = 'block';
     }
+
+    toggleConfirmButton();
 }
 
 function removeFromCart(index) {
@@ -139,6 +143,16 @@ function removeFromCart(index) {
 function updateTotalCost(){
     totalCost = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     totalCostElement.textContent = `$${totalCost.toFixed(2)}`;
+
+    let confirmButton = document.querySelector('.confirm-order');
+    if (!confirmButton && cart.length > 0) {
+        confirmButton = document.createElement('button');
+        confirmButton.textContent = "Confirm Order";
+        confirmButton.classList.add('confirm-order');
+        totalCostElement.parentElement.appendChild(confirmButton);
+    }
+
+    toggleConfirmButton();
 }
 
 function updateCartHeading() {
@@ -146,5 +160,16 @@ function updateCartHeading() {
     if (cart.length === 0) {
         cartItemsList.innerHTML = '';
         cartHeading.textContent = 'Your Cart (0)';
+    }
+}
+
+function toggleConfirmButton() {
+    const confirmButton = document.querySelector('.confirm-order');
+    if (confirmButton) {
+        if (cart.length === 0) {
+            confirmButton.style.display = 'none';
+        } else {
+            confirmButton.style.display = 'block';
+        }
     }
 }
