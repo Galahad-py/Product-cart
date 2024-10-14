@@ -274,3 +274,9 @@ img {
     color: hsl(14, 65%, 9%);
     font-weight: 800;
 }
+
+
+.selected-border {
+    /* background-color: hsl(14, 86%, 42%); */
+    border: 1px solid #e44d26;
+}

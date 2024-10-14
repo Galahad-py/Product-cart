@@ -15,11 +15,16 @@ cartButtons.forEach((button, index) => {
             itemCounts[index] = 1;
             updateCartButton(button, index);
             addToCart(index);
+
+            const productImage = button.closest('.cart-container').querySelector('.product-image');
+            productImage.classList.add('selected-border');
         }
     });
 });
 
-function updateCartButton(button, index) {
+function updateCartButton(button, index) {  
+    button.classList.add('selected-border');
+   
     button.innerHTML = `
     <button class = "decrease-btn">-</button>
     <span class="item-count">${itemCounts[index]}</span>
@@ -50,13 +55,19 @@ function updateCartButton(button, index) {
             setTimeout(() => {
                 resetCartButton(button, index);
                 removeFromCart(index);
-            }, 500);
+            }, 1);
         }
     }
 }
 
 function resetCartButton(button, index) {
     itemCounts[index] = 0;
+
+    button.classList.remove('selected-border');
+
+    const productImage = button.closest('.cart-container').querySelector('.product-image');
+    productImage.classList.remove('selected-border');
+
     button.innerHTML = "Add to the Cart";
 }
 
@@ -134,6 +145,12 @@ function toggleEmptyCartState() {
 
 function removeFromCart(index) {
     cart = cart.filter(cartItem => cartItem.id !== index);
+
+    itemCounts[index] = 0;
+
+    const button = cartButtons[index];
+    resetCartButton(button, index);
+
     document.querySelector(`#item-${index}`).remove();
     updateTotalCost();
     updateCartHeading();
