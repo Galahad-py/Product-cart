@@ -122,12 +122,17 @@ img {
     border-radius: 8px;
     padding: 20px;
     width: 300px;
-    /* height: 250px; */
+    max-height: 400px;
     margin-top: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     z-index: 1000;
 }
+
+.confirm-cart::-webkit-scrollbar {
+    display: none;
+}
+
 
 .cart-heading {
     color: #e44d26;
@@ -275,13 +280,10 @@ img {
     font-weight: 800;
 }
 
-
 .selected-border {
     /* background-color: hsl(14, 86%, 42%); */
     border: 1px solid #e44d26;
 }
-
-
 
 .order-confirmation-popup {
     position: fixed;
@@ -293,15 +295,11 @@ img {
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
     width: 80%;
     max-width: 400px;
-    z-index: 1000;
+    z-index: 1001;
     padding: 20px;
-    max-height: 60vh; /* Set a maximum height */
-    overflow-y: auto; /* Enable vertical scroll if content exceeds max-height */
+    pointer-events: auto;
+    opacity: 1;
 }
-
-.order-confirmation-popup::-webkit-scrollbar {
-    display: none; /* Hide the scrollbar in WebKit browsers */
-  }
 
 .popup-content {
     background-color: white;
@@ -342,10 +340,18 @@ img {
 }
 
 .order-details {
+    max-height: 300px; 
+    overflow-y: auto;
+    padding-right: 10px;
     margin-bottom: 20px;
     background-color: hsl(0, 100%, 98%);
     padding: 10px;
     border-radius: 10px;
+    position: relative;
+}
+
+.order-details::-webkit-scrollbar {
+    display: none; 
 }
 
 .item-details {
@@ -405,3 +411,20 @@ img {
     background-color: hsl(14, 88%, 29%);
 }
 
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1000; 
+    display: none;
+}
+
+.disable-page {
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 1; 
+}

@@ -7,6 +7,7 @@ const cartItemsList = document.querySelector('.cart-items-list');
 const totalCostElement = document.querySelector('.total-cost');
 const cartHeading = document.querySelector('.cart-heading');
 
+
 cartButtons.forEach((button, index) => {
     itemCounts[index] = 0;
 
@@ -204,6 +205,12 @@ function toggleConfirmButton() {
 
 
 function showOrderConfirmationPopup () {
+
+    disablePageInteractions();
+
+    const backdrop = document.querySelector('.backdrop');
+    backdrop.style.display = 'block';
+
     const popup = document.createElement('div');
     popup.classList.add('order-confirmation-popup');
 
@@ -248,8 +255,21 @@ function showOrderConfirmationPopup () {
 
     popup.querySelector('.start-new-order').addEventListener('click', () => {
         document.body.removeChild(popup);
+        backdrop.style.display = 'none';
+        enablePageInteraction();
         resetCart();
     });
+}
+
+function closeOrderConfirmationPopup() {
+    const popup = document.querySelector('.order-confirmation-popup');
+    if (popup) {
+        popup.remove();
+    }
+    const backdrop = document.querySelector('.backdrop');
+    backdrop.style.display = 'none';
+
+    enablePageInteraction();
 }
 
 function resetCart() {
@@ -263,4 +283,36 @@ function resetCart() {
     updateTotalCost();
     updateCartHeading();
     toggleEmptyCartState();
+    toggleConfirmButton();
+    enablePageInteraction();
+}
+
+function toggleConfirmButton() {
+    const confirmButton = document.querySelector('.confirm-order');
+    if (confirmButton) {
+        confirmButton.style.display = cart.length === 0 ? 'none' : 'block';
+    }
+}
+
+
+function disablePageInteractions() {
+    document.body.classList.add('disable-page');
+
+    document.querySelectorAll('button').forEach(button => {
+        if (!button.closest('.order-confirmation-popup')) {
+            button.disabled = true;
+        }
+    });
+
+    document.body.style.overflow = 'hidden';
+}
+
+function enablePageInteraction() {
+    document.body.classList.remove('disable-page');
+
+    document.querySelectorAll('button').forEach(button => {
+        button.disabled = false;
+    });
+
+    document.body.style.overflow = 'auto';
 }
